@@ -401,7 +401,11 @@ private[spark] class TaskSetManager(
     }
     if(host == "10.0.79.14")
     {
-      host1 = "hdfs-datanode-fx4d2"
+      host1 = "10.0.63.11"
+    }
+    if(host == "hdfs-datanode-1tmj7")
+    {
+        host1 = "10.0.63.11"
     }
     for (index <- dequeueTaskFromList(execId, host, getPendingTasksForExecutor(execId))) {
       return Some((index, TaskLocality.PROCESS_LOCAL, false))
