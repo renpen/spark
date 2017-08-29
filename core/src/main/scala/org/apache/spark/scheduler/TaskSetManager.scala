@@ -380,14 +380,35 @@ private[spark] class TaskSetManager(
    * @return An option containing (task index within the task set, locality, is speculative?)
    */
   private def dequeueTask(execId: String, host: String, maxLocality: TaskLocality.Value)
-    : Option[(Int, TaskLocality.Value, Boolean)] =
+  : Option[(Int, TaskLocality.Value, Boolean)] =
   {
+    var host1 = host
+    if(host == "10.0.80.4")
+    {
+      host1 = "hdfs-datanode-7tc2m"
+    }
+    if(host == "10.0.23.9")
+    {
+      host1 = "hdfs-datanode-l093g"
+    }
+    if(host == "10.0.22.16")
+    {
+      host1 = "hdfs-datanode-0c9km"
+    }
+    if(host == "10.0.41.26")
+    {
+      host1 = "hdfs-datanode-01t3x"
+    }
+    if(host == "10.0.79.14")
+    {
+      host1 = "hdfs-datanode-fx4d2"
+    }
     for (index <- dequeueTaskFromList(execId, host, getPendingTasksForExecutor(execId))) {
       return Some((index, TaskLocality.PROCESS_LOCAL, false))
     }
 
     if (TaskLocality.isAllowed(maxLocality, TaskLocality.NODE_LOCAL)) {
-      for (index <- dequeueTaskFromList(execId, host, getPendingTasksForHost(host))) {
+      for (index <- dequeueTaskFromList(execId, host1, getPendingTasksForHost(host1))) {
         return Some((index, TaskLocality.NODE_LOCAL, false))
       }
     }
