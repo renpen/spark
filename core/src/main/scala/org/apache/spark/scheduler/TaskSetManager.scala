@@ -382,31 +382,37 @@ private[spark] class TaskSetManager(
   private def dequeueTask(execId: String, host: String, maxLocality: TaskLocality.Value)
   : Option[(Int, TaskLocality.Value, Boolean)] =
   {
-    var host1 = host
-    if(host == "10.0.80.4")
+//    var host1 = host
+//    if(host == "10.0.80.4")
+//    {
+//      host1 = "hdfs-datanode-7tc2m"
+//    }
+//    if(host == "10.0.23.9")
+//    {
+//      host1 = "hdfs-datanode-l093g"
+//    }
+//    if(host == "10.0.22.16")
+//    {
+//      host1 = "hdfs-datanode-0c9km"
+//    }
+//    if(host == "10.0.41.26")
+//    {
+//      host1 = "hdfs-datanode-01t3x"
+//    }
+//    if(host == "10.0.79.14")
+//    {
+//      host1 = "hdfs-datanode-fx4d2"
+//    }
+//    if(host == "10.0.63.11")
+//    {
+//        host1 = "hdfs-datanode-1tmj7"
+//    }
+    var host1 = KubernetesConnector.hostnames.get(host)
+    if(host1 == null)
     {
-      host1 = "hdfs-datanode-7tc2m"
+       host1 = host
     }
-    if(host == "10.0.23.9")
-    {
-      host1 = "hdfs-datanode-l093g"
-    }
-    if(host == "10.0.22.16")
-    {
-      host1 = "hdfs-datanode-0c9km"
-    }
-    if(host == "10.0.41.26")
-    {
-      host1 = "hdfs-datanode-01t3x"
-    }
-    if(host == "10.0.79.14")
-    {
-      host1 = "10.0.63.11"
-    }
-    if(host == "hdfs-datanode-1tmj7")
-    {
-        host1 = "10.0.63.11"
-    }
+    var test = KubernetesConnector.connector
     for (index <- dequeueTaskFromList(execId, host, getPendingTasksForExecutor(execId))) {
       return Some((index, TaskLocality.PROCESS_LOCAL, false))
     }
